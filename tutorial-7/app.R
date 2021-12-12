@@ -10,18 +10,18 @@
 library(shiny)
 library(dplyr)
 library(ggplot2)
-df <- as.data.frame(VADeaths)
 
+df <- as.data.frame(VADeaths)
 # Define UI for application that draws a histogram
 ui <- fluidPage(
   
   # Application title
-  titlePanel("Old Faithful Geyser Data"),
+  titlePanel("Death Rates in Virginia (1940)"),
   
   # Sidebar with a slider input for number of bins 
   sidebarLayout(
     sidebarPanel(
-      selectInput("state", "State", choices = names(df)),
+      selectInput("category", "Category", choices = names(df)),
       
     ),
     
@@ -34,17 +34,15 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-  
   data <- reactive(df %>%
-                     select(.data[[input$state]]))
+                     select(.data[[input$category]]))
   
   output$data <- renderPlot({
-    barplot( df[[input$state]],main = "Death Rates in Virginia",
+    barplot( df[[input$category]],main = "Death Rates in Virginia",
              xlab = "Age", ylab = "Rate",ylim = c(0, 100),names.arg=rownames(df))
   })
 }
 
 # Run the application 
 shinyApp(ui = ui, server = server)
-
 
